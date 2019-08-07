@@ -8,6 +8,7 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
   	assert_select "a[href=?]", about_path
   	assert_select "a[href=?]", help_path
   	assert_select "a[href=?]", contact_path
+    assert_select "a[href=?]", signup_path
   end
   
   test "title should be right" do
@@ -18,6 +19,8 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     get help_path
     assert_select "title", full_title("Help")
     get contact_path
-    assert_select "title", full_title("Contact") 
+    assert_select "title", full_title("Contact")
+    get signup_path
+    assert_select "title", full_title("Sign Up")
   end 
 end
