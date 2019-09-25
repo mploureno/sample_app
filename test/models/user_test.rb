@@ -1,7 +1,56 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-end
+  def setup
+  	@user = User.new(name: "User name", email: "user@email.com")
+  end 
+  test "should be valid" do
+    assert @user.valid?
+  end
+
+  test "name should be present" do
+    @user.name  = "      "
+    assert_not @user.valid?
+  end 
+ 
+  test "email should be present" do
+    @user.email = "      "
+    assert_not @user.valid? 	
+  end
+
+  test "name should not be too long" do
+    @user.name = "a" * 51
+    assert_not @user.valid?
+  end  
+
+  test "email should not be too long" do
+    @user.email = "a" * 244 + "@email.com"
+    assert_not @user.valid?
+  end
+  # %w[] tecnique for making arrays of strings
+  test "valid email addresses should pass" do
+    valid_addresses = %w[user@email.com USER@email.COM U_S-ER@email.str.org
+      u.ser@email.st u+ser@emailstr.st]
+    valid_addresses.each do |valid_address|
+      @user.email = valid_address
+      assert @user.valid?, "#{valid_address.inspect} should be valid"
+    end  
+  end
+
+  test "invalid email addresses should fail" do
+    invalid_addresses = %w[user@email,com user_st_str user.name@email. 
+                           user@str_str.com user@email+str.com]
+    invalid_addresses.each do |invalid_address|
+      @user.email = invalid_address
+      assert_not @user.valid?, "#{invalid_address.inspect} should be invalid"
+    end                         
+  end
+
+  test "email addresses should be unique" do
+    # .dup creates a duplicate user with same attributes 
+    duplicate_user = @user.dup     
+    duplicate_user.email = @user.email.upcase
+    @user.save
+    assert_not duplicate_user.valid?
+  end
+end  
