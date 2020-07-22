@@ -2,12 +2,11 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require "minitest/reporters"
-Minitest::Reporters.use!	
+Minitest::Reporters.use!
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
-  # Makes it possible for test helper to use ApplicationHelper module.  
+  # Makes it possible for test helper to use ApplicationHelper module.
   include ApplicationHelper
-  
 end
